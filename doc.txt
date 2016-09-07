@@ -1,0 +1,120 @@
+Avant de lire cette documentation veuillez consulter le diagramme des classes.
+
+Afin de créer une librairie de jeu ou une libraire graphique, vous aurez besoin
+des informations suivantes.
+
+Voici le contenu de  l'objet "Drawable" (src/common/include/Drawable.hpp) en
+détail:
+
+struct Drawable
+{
+  Drawable(void)
+  {
+    type = DRAWABLE_NONE;
+    texture = NULL;
+    csize = 0;
+    rotation = 0;
+  }
+  Drawable(Drawable const& d)
+  {
+    *this = d;
+  }
+  Drawable &operator=(Drawable const& other)
+  {
+   type = other.type;
+    pos = other.pos;
+    size = other.size;
+    rgba = other.rgba;
+    texture = other.texture;
+    text = other.text;
+    csize = other.csize;
+    return (*this);
+  }
+    DrawableType type;
+    Vector2u pos;
+    Vector2u size;
+    Vector2u origin;
+    Vector2u rpos;
+    RGBA rgba;
+    FileCache const * texture;
+    int rotation;
+    std::string text;
+    size_t csize;
+  };
+
+Le type DrawableType est un enum:
+
+enum DrawableType
+{
+  DRAWABLE_NONE = 0,
+  DRAWABLE_TEXTURE,
+  DRAWABLE_RGBA,
+  DRAWABLE_TEXT
+};
+
+Qui permet d'identifier, quel type de donnée est contenu dans l'objet Drawable.
+
+L'objet Drawable contiendra toutes les données associé à votre libraire de jeu
+ou librairie graphique, il commutera entre les librairies graphiques, les
+librairies de jeux, et le corps du programme.
+
+1. Création d'une librairie de jeu
+
+Pour être compatible avec le corps du programme, votre librairie de jeu devra
+hériter de l'interface IGames (src/games/IGames.hpp).
+
+class IGames
+{
+public:
+  virtual ~IGames(void) {}
+  virtual std::string getGamesName(void) const = 0;
+  virtual Drawable const& getBackgroundTexture(void) const = 0;
+  virtual bool input(InputT const input) = 0;
+  virtual void restart(void) = 0;
+  virtual std::list<Vector2u> const& getPlayerPosition(void) const = 0;
+  virtual bool isPlayerAlive(void) const = 0;
+  virtual bool isPlayerWin(void) const = 0;
+  virtual void setPlayerName(std::string const& name) = 0;
+  virtual std::string getPlayerName(void) const = 0;
+  virtual size_t getScore(void) const = 0;
+  virtual Vector2u getDimension(void) const = 0;
+  virtual Vector2u getScale(void) const = 0;
+  virtual void updateGame(float const delta) = 0;
+  virtual Map const& getMap(void) const = 0;
+  virtual void loadTexture(void) = 0;
+  virtual Drawable const* getTexture(Vector2u const& pos) const = 0;
+  virtual std::vector<Drawable> const& getDrawableEvent(void) const = 0;
+ };
+
+Toute donnée à transmettre au corps, ou a recevoir du corps, se fera au travers
+de l'objet Drawable.
+
+2. Création d'une librairie graphique
+
+Pour être compatible avec le corps du programme, votre librairie graphique
+devra hériter de l'interface IGraphic (src/graphics/IGraphic.hpp).
+
+class IGraphic
+{
+public:
+  virtual ~IGraphic(void) {}
+  /* misc */
+  virtual void setTitleWindow(std::string const& title) = 0;
+  virtual void setWindowSize(Vector2u const& size) = 0;
+  virtual bool isOpen(void) const = 0;
+  virtual void close(void) = 0;
+  /* Input converter */
+  virtual InputT checkInput(void) = 0;
+  /* screen display */
+  virtual void clearScreen(void) = 0;
+  virtual void draw(Drawable const& drawable) = 0;
+  virtual void display(void) = 0;
+};
+
+Toute donnée à recevoir du corps, se fera au travers de l'objet Drawable.
+
+
+Si vous souhaitez avoir d'avantage d'informations veuillez nous contacter
+aux adresses suivantes:
+avelin_j@epitech.eu
+galibe_s@epitech.eu

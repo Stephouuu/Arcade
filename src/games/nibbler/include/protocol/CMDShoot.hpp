@@ -1,0 +1,32 @@
+//
+// CMDShoot.hpp for arcade in /home/galibe_s/rendu/cpp_arcade/include/protocol
+// 
+// Made by stephane galibert
+// Login   <galibe_s@epitech.net>
+// 
+// Started on  Thu Mar 17 20:52:40 2016 stephane galibert
+// Last update Thu Mar 17 22:12:01 2016 stephane galibert
+//
+
+#ifndef _CMDSHOOT_HPP_
+# define _CMDSHOOT_HPP_
+
+# include <iostream>
+# include <string>
+# include <unistd.h>
+
+# include "Protocol.hpp"
+# include "ICommand.hpp"
+
+namespace arcade
+{
+  class CMDShoot : public ICommand
+  {
+  public:
+    CMDShoot(void);
+    virtual ~CMDShoot(void);
+    virtual void compute(IGames& game);
+  };
+}
+
+#endif /* !_CMDSHOOT_HPP_ */
